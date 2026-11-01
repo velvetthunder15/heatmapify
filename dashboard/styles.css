@@ -571,3 +571,9 @@ button:active, .dl-btn:active, .cta-ghost:active, .cta a.btn-primary:active, .na
 .secret { -webkit-text-security: disc; font-family: var(--mono); letter-spacing: .04em; }
 .secret.revealed { -webkit-text-security: none; }
 .secret::placeholder { -webkit-text-security: none; }
+
+.bmc-btn { display: inline-flex; align-items: center; gap: 7px; height: 36px; padding: 0 12px; border-radius: 6px; background: #ffdd00; color: #1a1a1a; font-size: 13px; font-weight: 650; white-space: nowrap; text-decoration: none; transition: filter .15s, transform .15s; }
+.bmc-btn:hover { filter: brightness(1.05); transform: translateY(-1px); }
+.bmc-btn svg { width: 16px; height: 16px; flex: none; }
+@media (max-width: 760px) { .bmc-btn { width: 34px; height: 34px; padding: 0; justify-content: center; } .bmc-btn span { display: none; } }
+@media (max-width: 480px) { .topbar .bmc-btn { display: none; } }
