@@ -572,8 +572,9 @@ button:active, .dl-btn:active, .cta-ghost:active, .cta a.btn-primary:active, .na
 .secret.revealed { -webkit-text-security: none; }
 .secret::placeholder { -webkit-text-security: none; }
 
-.bmc-btn { display: inline-flex; align-items: center; gap: 7px; height: 36px; padding: 0 12px; border-radius: 6px; background: #ffdd00; color: #1a1a1a; font-size: 13px; font-weight: 650; white-space: nowrap; text-decoration: none; transition: filter .15s, transform .15s; }
-.bmc-btn:hover { filter: brightness(1.05); transform: translateY(-1px); }
-.bmc-btn svg { width: 16px; height: 16px; flex: none; }
+.bmc-btn { display: inline-flex; align-items: center; gap: 7px; height: 36px; padding: 0 12px; border-radius: 6px; color: var(--text); font-size: 13px; font-weight: 650; white-space: nowrap; text-decoration: none; border: 1px solid transparent; background: linear-gradient(var(--bg), var(--bg)) padding-box, var(--grad) border-box; transition: box-shadow .15s, transform .15s; -webkit-tap-highlight-color: transparent; }
+.bmc-btn:hover { box-shadow: 0 6px 22px -8px rgba(255, 70, 40, .6); transform: translateY(-1px); }
+.bmc-btn svg { width: 17px; height: 17px; flex: none; }
 @media (max-width: 760px) { .bmc-btn { width: 34px; height: 34px; padding: 0; justify-content: center; } .bmc-btn span { display: none; } }
-@media (max-width: 480px) { .topbar .bmc-btn { display: none; } }
+@media (max-width: 440px) { .nav-right { gap: 5px; } .navlinks a { padding: 7px 7px; font-size: 13px; } .icon-link, .theme-btn, .bmc-btn { width: 32px; height: 32px; } }
+@media (max-width: 440px) { .topbar-in { gap: 6px; padding: 0 12px; } .navlinks a { padding: 7px 6px; } }
