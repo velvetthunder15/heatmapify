@@ -18,6 +18,8 @@ benchmarks/
   tools/
     compare_fig.py           one video: official vs estimate figure + metrics
     band_plot.py             many videos: accuracy vs comment count
+  audio/
+    v1.5/                    the trained audio model and its cross-validated results
   datasets/
     ytmr500/                 video id lists from the YTMR500 dataset, for bulk runs
 ```
@@ -47,6 +49,10 @@ Video 2 (30,203 comments): comments alone reach ρ 0.53, but captions run negati
 \* The v1.3 data was digitised from exported PNGs, not raw JSON. The listed top-5 and drop-off scores are exact; the other bins are read from the plotted curve to within about ±0.02. The mean and hot-segment share match the export summary. Later entries use raw JSON exports.
 
 Note that p-values treat bins as independent. Neighbouring bins are autocorrelated, so the p-values are optimistic.
+
+## Audio signal
+
+[audio/v1.5](audio/v1.5/RESULTS.md): the audio signal alone on 20 YTMR500 videos, leave-one-video-out. Loudness only ρ −0.01, YAMNet zero-shot ρ 0.04, **YAMNet + trained head ρ 0.16** (now the default). Top-5 found: 21%, 26%, 26%.
 
 ## Accuracy vs engagement
 

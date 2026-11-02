@@ -1,0 +1,91 @@
+{
+ "active": true,
+ "features": [
+  "loudness",
+  "loudness_change",
+  "speech_rate",
+  "noisy_burst",
+  "laughter_max",
+  "laughter_mean",
+  "applause_max",
+  "applause_mean",
+  "crowd_max",
+  "crowd_mean",
+  "excited_max",
+  "excited_mean",
+  "impact_max",
+  "impact_mean",
+  "music_max",
+  "music_mean",
+  "speech_max",
+  "speech_mean",
+  "silence_max",
+  "silence_mean",
+  "reaction"
+ ],
+ "use_embeddings": false,
+ "alpha": 3000,
+ "coef": [
+  -0.006924,
+  0.00718,
+  -0.0141,
+  0.001147,
+  0.016534,
+  0.022926,
+  0.007943,
+  -0.001713,
+  0.02145,
+  0.020925,
+  0.027595,
+  0.023841,
+  0.000733,
+  0.0023,
+  0.017743,
+  0.01625,
+  0.000454,
+  -0.019419,
+  0.008786,
+  0.008329,
+  0.020712
+ ],
+ "intercept": 0.0,
+ "trained_on": [
+  "qDfwWZaNtSI",
+  "MxE7izaGyHA",
+  "ZzOZE7Zy-UU",
+  "OuehnUaT-Hk",
+  "g9_g6ccUKk0",
+  "Ri4pup0iaVw",
+  "dz3di_1ziQM",
+  "MYjQ7FKwT3U",
+  "HgW90IMzGnM",
+  "ibBkY6Q2kuM",
+  "tUlmWgyxgV4",
+  "14g71-Ulacs",
+  "9JIQUbjhf68",
+  "IAPXpCpn8eM",
+  "t4b_Fr-dhEg",
+  "yRQBbOCFCpc",
+  "MzgccLkvYU4",
+  "R_v490FEwIk",
+  "tt0y5M79HT4",
+  "CiaC2QAuR1M"
+ ],
+ "window_seconds": 10,
+ "cv": {
+  "trained": {
+   "spearman": 0.161,
+   "top5": 0.26
+  },
+  "zero_shot": {
+   "spearman": 0.037,
+   "top5": 0.26
+  },
+  "basic": {
+   "spearman": -0.013,
+   "top5": 0.21
+  }
+ },
+ "created": "2026-11-03T01:15:00+05:30",
+ "source": "Trained by Chirag on 20 YTMR500 videos (benchmarks/datasets/ytmr500/batch1.txt, first 20), leave-one-video-out CV"
+}

@@ -6,7 +6,8 @@ estimate's windows as a small feature table. Two ways to turn that table into a 
 
   1. zero-shot (default): a "reaction" score = the strongest of laughter / applause / crowd /
      excitement in each window, blended with loudness and speech rate.
-  2. trained head (models/audio_head.json, made by `python -m scripts.train_audio`): a ridge
+  2. trained head (models/audio_head.json, made by `python -m scripts.train_audio`, or the bundled
+     default_audio_head.json trained on 20 YTMR500 videos): a ridge
      regression fitted on YOUR videos' official "Most replayed" curves, on top of the frozen
      YAMNet features (transfer learning). Used only when it beat zero-shot in cross-validation.
 
@@ -177,16 +178,23 @@ def head_path() -> Path:
     return MODEL_DIR / HEAD_FILE
 
 
+DEFAULT_HEAD = Path(__file__).with_name("default_audio_head.json")
+
+
 def load_head() -> dict | None:
-    p = head_path()
-    if not p.exists():
-        return None
-    try:
-        h = json.loads(p.read_text(encoding="utf-8"))
+    """Your own trained head (models/audio_head.json) if present, else the bundled default.
+    A head of yours that is saved but OFF means zero-shot: it didn't beat it on your videos."""
+    for p in (head_path(), DEFAULT_HEAD):
+        if not p.exists():
+            continue
+        try:
+            h = json.loads(p.read_text(encoding="utf-8"))
+        except Exception as exc:  # noqa: BLE001
+            log_event(log, "audio_head_unreadable", path=p.name, error=str(exc)[:120])
+            continue
         if h.get("active") and h.get("coef") and h.get("features"):
             return h
-    except Exception as exc:  # noqa: BLE001
-        log_event(log, "audio_head_unreadable", error=str(exc)[:120])
+        return None
     return None
 
 

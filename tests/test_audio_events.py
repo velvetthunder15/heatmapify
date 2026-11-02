@@ -85,3 +85,12 @@ def test_real_model_silence():
     t, s, e = ae.run_yamnet(np.zeros(16000 * 5, dtype=np.float32))
     assert s.shape[1] == 521 and e.shape[1] == 1024 and len(t) == len(s)
     assert int(s.mean(axis=0).argmax()) == ae.GROUPS["silence"][0]
+
+
+def test_bundled_head_matches_features(monkeypatch, tmp_path):
+    from scripts import train_audio as ta
+
+    monkeypatch.setattr(ae, "MODEL_DIR", tmp_path)  # no personal head
+    h = ae.load_head()
+    assert h is not None and h["features"] == ta.hand_feature_names()
+    assert len(h["coef"]) == len(h["features"]) and not h["use_embeddings"]

@@ -32,7 +32,7 @@ sys.path.insert(0, str(ROOT))
 from scripts.calibrate import CACHE, resample, spearman, top_hits, video_id  # noqa: E402
 
 AUDIO_CACHE = CACHE / "audio"
-ALPHAS = [0.3, 1, 3, 10, 30, 100, 300, 1000, 3000]
+ALPHAS = [0.3, 1, 3, 10, 30, 100, 300, 1000, 3000, 10000, 30000, 100000]
 MIN_VIDEOS = 5
 MARGIN = 0.02  # the head must beat zero-shot by this much rank correlation to be switched on
 

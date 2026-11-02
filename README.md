@@ -259,7 +259,7 @@ A **signal** is one independent measurement taken for every segment. Each one is
 |---|---|---|
 | **Comments** | 0.35 | Finds timestamps people write in comments (`3:42`, `1:02:10`). Each mention is spread over ±5 s, and liked comments count more (weight `1 + ln(1 + likes)`). Up to 2,000 comments. Skipped if fewer than 10 timestamped comments. Uses the YouTube Data API when `YT_API_KEY` is set, else yt-dlp scraping |
 | **Captions** (`transcript`) | 0.25 | Transcript text per segment, scored on hook phrases ("watch this", "here's why"), emphasis words ("insane", "biggest"), questions, numbers and claims, topic shifts versus the previous segment, and speech density. Optional LLM rating blended in when `LLM_API_KEY` is set |
-| **Audio** | 0.25 | 16 kHz mono audio. **Audio events** from [YAMNet](https://huggingface.co/audiomagic/yamnet-onnx) (Google's AudioSet classifier, 521 sounds, run locally with ONNX Runtime): each window's *reaction* score is the strongest of laughter, applause/cheering, crowd noise and shouting/gasps. Audio = `0.5 × reaction + 0.3 × loudness (RMS dB) + 0.2 × onset rate`. If you've trained the audio model (below) and it beat this on unseen videos, its prediction is used instead. If the model can't load, it falls back to `0.5 × loudness + 0.3 × onset rate + 0.2 × loud noise-like bursts`. Past the end of the audio counts as silence |
+| **Audio** | 0.25 | 16 kHz mono audio. **Audio events** from [YAMNet](https://huggingface.co/audiomagic/yamnet-onnx) (Google's AudioSet classifier, 521 sounds, run locally with ONNX Runtime): each window's *reaction* score is the strongest of laughter, applause/cheering, crowd noise and shouting/gasps. Audio = `0.5 × reaction + 0.3 × loudness (RMS dB) + 0.2 × onset rate`. A trained head is used instead: the bundled default (trained on 20 videos with official data), or your own if you train one (below) and it beats zero-shot on unseen videos. If the model can't load, it falls back to `0.5 × loudness + 0.3 × onset rate + 0.2 × loud noise-like bursts`. Past the end of the audio counts as silence |
 | **Visuals** | 0.15 | A ≤360p video-only stream decoded by ffmpeg to 64×36 grayscale frames at 2 fps (AV1, VP9 and H.264 all work): `0.6 × cut density + 0.4 × motion`. A cut is a frame jump far above the video's usual change (median + 6 × MAD, at least 25) |
 
 ### How the final score is calculated
@@ -299,7 +299,7 @@ YAMNet's 1024-number embedding) with YouTube's official curve. It then fits a sm
 of the frozen YAMNet features (transfer learning: YAMNet itself isn't retrained, which would need far more
 data) and tests it with **leave-one-video-out cross-validation**, so every number it prints is for a video
 the model never saw. It compares three things: the old loudness-only signal, YAMNet zero-shot, and the
-trained head. The head is saved to `models/audio_head.json` and switched on only if it beats zero-shot;
+trained head. The head is saved to `models/audio_head.json` and switched on only if it beats zero-shot (a head of yours always overrides the bundled default, which was trained on 20 YTMR500 videos: ρ 0.16 vs 0.04 zero-shot on unseen videos, see `benchmarks/audio/v1.5`);
 restart the server to use it. Features are cached in `calibration/audio/`, so adding videos later is quick.
 
 Cost: the model is 16 MB, downloaded once on first use (checked against a pinned SHA-256) into `models/`.
