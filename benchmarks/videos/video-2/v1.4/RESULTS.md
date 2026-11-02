@@ -1,4 +1,4 @@
-# youtu.be/RKQGRPoDV_I, Heatmapify v1.4
+# Video 2 (youtu.be/RKQGRPoDV_I), Heatmapify v1.4
 
 24M views · 30,203 comments · 33:25 · 264 timestamped comments used by the estimate.
 Official is YouTube's "Most replayed" curve: 100 bins × 20.05 s. Estimated is a forced estimate: 200 windows × 10 s, averaged onto the official bins (overlap-weighted).

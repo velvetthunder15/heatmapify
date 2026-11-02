@@ -1,14 +1,14 @@
 """Accuracy vs engagement: how the estimate's accuracy changes with a video's comment count.
 
-Reads every benchmarks/<video_id>/<version>/ folder that holds official.json, estimated.json and
-meta.json ({"comments": 6598, "views": 2900000, "genre": "gaming"}) and plots two accuracy scores
+Reads every benchmarks/videos/video-N/<version>/ folder that holds official.json and estimated.json,
+with the video's facts in benchmarks/videos/video-N/meta.json ({"comments": 6598, "views": 2900000, "genre": "gaming"}) and plots two accuracy scores
 against comment count (log scale):
 
   Peak accuracy %     share of the official top-5 peaks the estimate finds within +/-15 s
   Ranking accuracy %  share of segment pairs the estimate orders the same way as YouTube
                       ((Kendall tau + 1) / 2; 50% is chance, 100% is perfect)
 
-Usage:  python benchmarks/band_plot.py [version] [genre] [out.png]
+Usage:  python benchmarks/tools/band_plot.py [version] [genre] [out.png]
         defaults: v1.4, gaming, benchmarks/accuracy_vs_engagement.png
 Also writes a CSV of the numbers next to the PNG.
 """
@@ -20,7 +20,7 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import FuncFormatter
 from scipy import stats
 
-HERE = os.path.dirname(os.path.abspath(__file__))
+HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # benchmarks/
 version = sys.argv[1] if len(sys.argv) > 1 else "v1.4"
 genre = sys.argv[2] if len(sys.argv) > 2 else "gaming"
 out = sys.argv[3] if len(sys.argv) > 3 else os.path.join(HERE, "accuracy_vs_engagement.png")
@@ -65,14 +65,16 @@ def score(folder):
 
 
 rows = []
-for meta_p in sorted(glob.glob(os.path.join(HERE, "*", version, "meta.json"))):
-    folder = os.path.dirname(meta_p)
+for meta_p in sorted(glob.glob(os.path.join(HERE, "videos", "video-*", "meta.json"))):
+    folder = os.path.join(os.path.dirname(meta_p), version)
     meta = json.load(open(meta_p))
+    if "comments" not in meta:
+        continue
     if genre != "all" and meta.get("genre") != genre:
         continue
     if not all(os.path.exists(os.path.join(folder, f)) for f in ("official.json", "estimated.json")):
         continue
-    vid = os.path.basename(os.path.dirname(folder))
+    vid = meta.get("video_id") or os.path.basename(os.path.dirname(folder))
     rows.append({"video": vid, "comments": int(meta["comments"]), "views": int(meta.get("views", 0)), **score(folder)})
 
 if len(rows) < 2:
