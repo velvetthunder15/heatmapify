@@ -23,6 +23,8 @@ RUN pip install -r requirements.txt \
 
 COPY app ./app
 COPY scripts ./scripts
+# YAMNet audio-event model (16 MB, Apache-2.0), fetched at build time and checked against its pinned SHA-256.
+RUN python -c "from app.sources.audio_events import ensure_model; ensure_model()"
 
 RUN useradd --create-home --uid 10001 appuser && mkdir -p /tmp/yt-heatmap && chown appuser /tmp/yt-heatmap
 USER appuser

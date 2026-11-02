@@ -259,7 +259,7 @@ A **signal** is one independent measurement taken for every segment. Each one is
 |---|---|---|
 | **Comments** | 0.35 | Finds timestamps people write in comments (`3:42`, `1:02:10`). Each mention is spread over ±5 s, and liked comments count more (weight `1 + ln(1 + likes)`). Up to 2,000 comments. Skipped if fewer than 10 timestamped comments. Uses the YouTube Data API when `YT_API_KEY` is set, else yt-dlp scraping |
 | **Captions** (`transcript`) | 0.25 | Transcript text per segment, scored on hook phrases ("watch this", "here's why"), emphasis words ("insane", "biggest"), questions, numbers and claims, topic shifts versus the previous segment, and speech density. Optional LLM rating blended in when `LLM_API_KEY` is set |
-| **Audio** | 0.25 | 16 kHz mono audio: `0.5 × loudness (RMS dB) + 0.3 × onset rate (how busy) + 0.2 × bursts`, where bursts are loud and noise-like frames, a cheap detector for laughter, applause and cheering. Past the end of the audio counts as silence |
+| **Audio** | 0.25 | 16 kHz mono audio. **Audio events** from [YAMNet](https://huggingface.co/audiomagic/yamnet-onnx) (Google's AudioSet classifier, 521 sounds, run locally with ONNX Runtime): each window's *reaction* score is the strongest of laughter, applause/cheering, crowd noise and shouting/gasps. Audio = `0.5 × reaction + 0.3 × loudness (RMS dB) + 0.2 × onset rate`. If you've trained the audio model (below) and it beat this on unseen videos, its prediction is used instead. If the model can't load, it falls back to `0.5 × loudness + 0.3 × onset rate + 0.2 × loud noise-like bursts`. Past the end of the audio counts as silence |
 | **Visuals** | 0.15 | A ≤360p video-only stream decoded by ffmpeg to 64×36 grayscale frames at 2 fps (AV1, VP9 and H.264 all work): `0.6 × cut density + 0.4 × motion`. A cut is a frame jump far above the video's usual change (median + 6 × MAD, at least 25) |
 
 ### How the final score is calculated
@@ -285,6 +285,26 @@ double-click `calibrate.bat` (Windows) or `calibrate.command` (Mac). Or run
 `python -m scripts.calibrate --file calibration/videos.txt`. It runs both modes on each video, reports
 how well the estimate's ranking matches (Spearman) and how many of the real top-5 moments it found, then
 searches for the best weights and shape. Add `--apply` to save them to `.env`, then restart the server.
+
+#### Training the audio model on your own videos
+
+The audio signal can learn what engagement *sounds like* in the videos you analyse. Put videos that have
+the "Most replayed" graph in `calibration/videos.txt` (the same file calibrate uses; 15+ is best, 5 is the
+minimum) and double-click `train-audio.bat` (Windows) or `train-audio.command` (Mac), or run
+`python -m scripts.train_audio --file calibration/videos.txt`.
+
+For each video it downloads the audio once, runs YAMNet, and lines up the sound features (laughter,
+applause, crowd, shouting, impacts, music, speech, silence, loudness, change in loudness, speech rate, plus
+YAMNet's 1024-number embedding) with YouTube's official curve. It then fits a small ridge regression on top
+of the frozen YAMNet features (transfer learning: YAMNet itself isn't retrained, which would need far more
+data) and tests it with **leave-one-video-out cross-validation**, so every number it prints is for a video
+the model never saw. It compares three things: the old loudness-only signal, YAMNet zero-shot, and the
+trained head. The head is saved to `models/audio_head.json` and switched on only if it beats zero-shot;
+restart the server to use it. Features are cached in `calibration/audio/`, so adding videos later is quick.
+
+Cost: the model is 16 MB, downloaded once on first use (checked against a pinned SHA-256) into `models/`.
+It runs on the CPU in roughly 2 to 5 seconds per 10 minutes of audio and about 300 MB of RAM, only for
+estimates. Set `AUDIO_EVENTS=false` in `.env` to switch it off.
 
 If a signal can't be measured (comments off, no captions, a download fails), it's dropped and the
 remaining weights are scaled up to add to 1. It's listed in `signals_skipped` with the reason, for example
@@ -556,6 +576,7 @@ install-background.bat / uninstall-background.bat / background-status.bat   Wind
 install-background.command   macOS background mode
 rotate-key.bat / rotate-key.command   replace the API key
 calibrate.bat / calibrate.command     tune estimate weights against official data
+train-audio.bat / train-audio.command train the YAMNet audio model on official data
 setup-permanent-url.command   macOS permanent-URL setup
 worker/proxy.js           the workers.dev forwarding Worker
 render.yaml       deploys dashboard/ to Render (main dashboard, auto-deploys on push)

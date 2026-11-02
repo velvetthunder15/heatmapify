@@ -56,6 +56,8 @@ class Settings(BaseSettings):
     enable_transcript: bool = True
     enable_audio: bool = True
     enable_visual: bool = True
+    # YAMNet audio events (laughter, applause, crowd). Off = loudness-only audio signal.
+    audio_events: bool = True
 
     min_timestamped_comments: int = 10
     comment_spread_seconds: float = 5.0
