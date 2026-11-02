@@ -37,7 +37,7 @@ def _key_official(video_id: str) -> str:
 
 
 def _key_estimated(video_id: str, window: float) -> str:
-    return f"hm:estimated:v3:{video_id}:{int(window)}"  # v3: YAMNet audio events
+    return f"hm:estimated:v4:{video_id}:{int(window)}"  # v4: trained audio head
 
 
 def get_cached(r: redis.Redis, video_id: str, window: float, force_estimate: bool = False) -> HeatmapData | None:
