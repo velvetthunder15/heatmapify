@@ -1,0 +1,104 @@
+{
+  "mode": "bundled",
+  "weights": {
+    "comments": 0.35,
+    "transcript": 0.25,
+    "audio": 0.25,
+    "visual": 0.15
+  },
+  "median_target": 0.12,
+  "merge_tolerance": 0.05,
+  "seed": 0,
+  "audit": [
+    {
+      "video_id": "IKPJq5Z_1ZM",
+      "reasons": [
+        "missing per-window four-signal scores",
+        "missing audio cache: /workspace/scratch/d0a7fdf8d33d/heatmapify/calibration/audio/IKPJq5Z_1ZM-10.npz (or matching window size)"
+      ]
+    },
+    {
+      "video_id": "RKQGRPoDV_I",
+      "reasons": [
+        "missing audio cache: /workspace/scratch/d0a7fdf8d33d/heatmapify/calibration/audio/RKQGRPoDV_I-10.npz (or matching window size)"
+      ]
+    }
+  ],
+  "rejected_caches": [],
+  "audio_cache_count": 0,
+  "eligible_count": 0,
+  "missing_original_training_caches": [
+    "14g71-Ulacs",
+    "9JIQUbjhf68",
+    "CiaC2QAuR1M",
+    "HgW90IMzGnM",
+    "IAPXpCpn8eM",
+    "MYjQ7FKwT3U",
+    "MxE7izaGyHA",
+    "MzgccLkvYU4",
+    "OuehnUaT-Hk",
+    "R_v490FEwIk",
+    "Ri4pup0iaVw",
+    "ZzOZE7Zy-UU",
+    "dz3di_1ziQM",
+    "g9_g6ccUKk0",
+    "ibBkY6Q2kuM",
+    "qDfwWZaNtSI",
+    "t4b_Fr-dhEg",
+    "tUlmWgyxgV4",
+    "tt0y5M79HT4",
+    "yRQBbOCFCpc"
+  ],
+  "historical_exports_only": [
+    {
+      "video_id": "IKPJq5Z_1ZM",
+      "metrics": {
+        "spearman": 0.4051189466961369,
+        "peak_recall": 0.6,
+        "peak_hits": 3,
+        "official_peak_count": 5
+      }
+    },
+    {
+      "video_id": "RKQGRPoDV_I",
+      "metrics": {
+        "spearman": 0.21906636549387773,
+        "peak_recall": 0.4,
+        "peak_hits": 2,
+        "official_peak_count": 5
+      }
+    }
+  ],
+  "comparisons": {
+    "bundled": {
+      "videos": [],
+      "summary": {
+        "spearman": {
+          "n": 0
+        },
+        "peak_recall": {
+          "n": 0
+        }
+      }
+    }
+  },
+  "input_sha256": {
+    "/workspace/scratch/d0a7fdf8d33d/heatmapify/app/scoring.py": "5e13085d8e752a78d5c16a15ba120271465595b96e12b78e9538b47437da4ce0",
+    "/workspace/scratch/d0a7fdf8d33d/heatmapify/app/sources/audio.py": "24a065b04bc33a38c49c79174846bfd1a4e05b49c2f4e220d76a06f4373d53fc",
+    "/workspace/scratch/d0a7fdf8d33d/heatmapify/app/sources/audio_events.py": "49257eee8b032f5ea8fe766b22c56857abc49b4ffef5a8ef63fd4802c2e72ce1",
+    "/workspace/scratch/d0a7fdf8d33d/heatmapify/app/sources/default_audio_head.json": "24cb5a66c94d55595c17993af389f44d6d96912cb5b746bb40c147a57aeeb92c",
+    "/workspace/scratch/d0a7fdf8d33d/heatmapify/benchmarks/videos/video-1/v1.3-digitised/estimated.json": "b92e8643ed52b26b59736d63732436ee2c078b0ae2ffc158a13e43453bf49613",
+    "/workspace/scratch/d0a7fdf8d33d/heatmapify/benchmarks/videos/video-1/v1.3-digitised/official.json": "b6206e899400e156b3c9de384f97b14962616e8eabfab01d53118d81e681dd5f",
+    "/workspace/scratch/d0a7fdf8d33d/heatmapify/benchmarks/videos/video-2/v1.4/estimated.json": "c605887164e3f522657dbe613cc16c007a999ce0fac71a9cbf691cfd7495139c",
+    "/workspace/scratch/d0a7fdf8d33d/heatmapify/benchmarks/videos/video-2/v1.4/official.json": "a9e1b37c81bc04c824bd6d07360995c2539a8c0834b9101e02b27b02a1a560e3",
+    "/workspace/scratch/d0a7fdf8d33d/heatmapify/scripts/calibrate.py": "6b7603f4866f6698f3ecf5543532f2de2849ac4c2284fd959fcb7928aeb74c6e",
+    "/workspace/scratch/d0a7fdf8d33d/heatmapify/scripts/compare_audio_fusion.py": "6e99b259be656259b47e1a753de4181a4076d01b1490351c35880a59aba3948f",
+    "/workspace/scratch/d0a7fdf8d33d/heatmapify/scripts/train_audio.py": "d08f3adc6b143b0cca002af12001ffbc1057510230207a86dafe40c59c5e8b58"
+  },
+  "versions": {
+    "numpy": "2.3.5",
+    "scipy": "1.17.0",
+    "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]"
+  },
+  "git_revision": "8d1a7d9addc973a1e1f3f09c1d760889d97e344a"
+}
